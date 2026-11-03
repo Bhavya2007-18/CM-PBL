@@ -10,11 +10,11 @@
 
 ---
 
-## 1. Project Identity & Philosophy
+## 1. Project Overview & Philosophy
 
 > **Solve → Explain → Visualize → Compare → Understand**
 
-**EES (Engineering Equation Solver)** is an engineering-grade scientific computing application engineered from first principles in modern C++ (C++17/20). Rather than a disconnected set of numerical scripts, EES provides an integrated **Numerical Methods Engineering Workbench** designed for university Computational Methods PBL (Project-Based Learning) demonstrations, viva defense, and engineering design.
+**EES (Engineering Equation Solver)** is an engineering-grade scientific computing application engineered from first principles in modern C++ (C++17/20). Rather than a collection of disconnected practical scripts, EES provides an integrated **Numerical Methods Engineering Workbench** designed for university Computational Methods Project-Based Learning (PBL) demonstrations, viva defense, and engineering design.
 
 ### Key Highlights
 - **100% Pure C++ Implementation**: All algorithms (roots, optimization, matrices, eigenvalues, splines, ODEs, PDEs) are implemented from scratch without delegating to Python, MATLAB, NumPy, SciPy, or external numerical black boxes.
@@ -42,12 +42,13 @@
 
 ---
 
-## 3. Architecture & Directory Layout
+## 3. Directory Layout
 
 ```text
 EES/
-├── CMakeLists.txt                # Unified multi-target CMake 3.20+ build system
-├── README.md                     # Master project overview & syllabus mapping
+├── CMakeLists.txt                # Unified multi-target CMake 3.20+ build configuration
+├── README.md                     # Master project documentation (this file)
+├── LICENSE                       # MIT Open Source License
 ├── docs/
 │   ├── ARCHITECTURE.md           # Software architecture and design decisions
 │   ├── ALGORITHMS.md             # Equations, pseudocode, convergence proofs & complexity
@@ -64,7 +65,7 @@ EES/
 │   ├── comparison/               # Method Benchmark & Comparison Engine
 │   ├── advisor/                  # Numerical Method Advisor Heuristic Engine
 │   ├── problems/                 # Curated Engineering Problem Catalog
-│   └── ui/                       # Visualizer (ASCII plots, heatmaps, HTML exporter) & Workbench
+│   └── ui/                       # Visualizer (ASCII plots, heatmaps, HTML exporter), Workbench & CLI
 ├── src/                          # Implementations matching include/ees/
 ├── tests/
 │   ├── test_core.cpp             # Core math tests
@@ -77,52 +78,144 @@ EES/
 
 ---
 
-## 4. Build & Run Instructions
+## 4. How to Build & Run
 
 ### Prerequisites
-- Windows 10 or 11
-- CMake 3.20+
-- Modern C++ compiler: GCC / MinGW-w64 (GCC 10+) or MSVC (Visual Studio 2019/2022)
-- Ninja or Make build tool
+- **Operating System**: Windows 10 or Windows 11 (64-bit)
+- **Compiler**: GCC / MinGW-w64 (GCC 10+) or MSVC (Visual Studio 2019/2022) or Clang
+- **Build System**: CMake 3.20+ and Ninja (or Make)
 
-### Build Commands (via Ninja)
+### Step 1: Configure & Compile
+
+Open **PowerShell** or **Command Prompt** in the project directory (`d:\CODING\CM PBL`):
+
 ```powershell
-# 1. Configure build directory
+# 1. Generate Ninja build files with CMake
 cmake -B build -G Ninja
 
-# 2. Compile all targets
+# 2. Compile the entire application and test suite
 ninja -C build
-
-# 3. Run all automated unit tests (100% pass rate)
-ctest --test-dir build --output-on-failure
 ```
 
-### Launching the Application
+*(Alternatively, if using Visual Studio generator: `cmake -B build` and `cmake --build build --config Release`)*
+
+---
+
+### Step 2: How to Run the Application
+
+The build produces two executable targets:
+- `build/ees.exe` — The primary Unified CLI and Workbench binary
+- `build/ees_app.exe` — Alternative binary name
+
+There are **three distinct ways** to run EES:
+
+#### Mode A: Interactive Desktop Workbench (Recommended for Exploring)
+Run the executable with no arguments (or with `interactive`):
+
 ```powershell
-# 1. Direct Command-Line Interface (CLI mode)
+.\build\ees.exe
+# OR
+.\build\ees.exe interactive
+```
+
+This launches the terminal scientific workbench with full menu navigation:
+```text
+========================================================================================
+   EES — ENGINEERING EQUATION SOLVER
+   MAIN WORKBENCH DASHBOARD
+========================================================================================
+  [1] UNIT I:  Foundations, Error Analysis & Computer Arithmetic Lab
+  [2] UNIT I:  Root-Finding Laboratory (Bisection, Newton, Secant)
+  [3] UNIT I:  Optimization (Fibonacci, Golden Section, Nelder-Mead)
+  [4] UNIT II: Interpolation & Finite Differences Laboratory
+  [5] UNIT II: Numerical Integration & Quadrature Laboratory
+  [6] UNIT III: Linear Systems, Pivoting, LU & Cholesky Decomposition
+  [7] UNIT III: Dominant Eigenvalues (Power Method)
+  [8] UNIT III: Spline Approximation (Linear, Quadratic, Natural Cubic, B-Spline)
+  [9] UNIT IV: Numerical Solution of ODEs (Euler, RK4, Predictor-Corrector)
+ [10] UNIT IV: Numerical Solution of PDEs (Heat, Wave, Laplace/Poisson)
+ [11] METHOD COMPARISON BENCHMARK ENGINE
+ [12] ENGINEERING PROBLEM CATALOG (Mechanical, Civil, Electrical, Thermal)
+ [13] NUMERICAL METHOD ADVISOR (Intelligent Recommendation Engine)
+ [14] ALL-IN-ONE PBL VIVA DEMONSTRATION MODE (One-Click Showcase)
+  [0] Exit EES
+```
+
+#### Mode B: One-Click PBL Viva Demonstration (Best for Viva Defense)
+To immediately execute all 9 core syllabus milestone benchmarks sequentially without pausing:
+
+```powershell
+.\build\ees.exe demo
+# OR
+.\build\ees.exe --demo
+```
+
+#### Mode C: Direct Command-Line Interface (CLI Mode)
+You can directly solve equations, integrate, invert matrices, solve differential equations, or compare methods from your terminal:
+
+```powershell
+# 1. Root Finding: solve custom equation with quadratic Newton-Raphson & plot curve
 .\build\ees.exe root "x^3 - 4*x - 9" --method newton --x0 2.5 --plot --step
+
+# 2. Compare Bisection vs Newton vs Secant on the same equation
 .\build\ees.exe root "x^3 - 4*x - 9" --compare
+
+# 3. 1D Optimization (Golden Section Search)
 .\build\ees.exe optimize "(x - 3)^2 + 4" --a 0 --b 5 --method golden
-.\build\ees.exe integrate "4 / (1 + x^2)" --from 0 --to 1 --method gauss5
+
+# 4. Numerical Integration (5-point Gauss-Legendre Quadrature)
+.\build\ees.exe integrate "4 / (1 + x^2)" --from 0 --to 1 --method gauss5 --exact 3.141592653589793
+
+# 5. Linear Systems: Solve Ax = b and inspect step-by-step row operations
 .\build\ees.exe solve-system --matrix "[[2,1,-1],[-3,-1,2],[-2,1,2]]" --rhs "[8,-11,-3]" --steps
+
+# 6. Matrix Factorization (Cholesky A = L*L^T on symmetric positive-definite matrix)
 .\build\ees.exe factorize --matrix "[[4,12],[12,45]]" --method cholesky
-.\build\ees.exe ode "y" --x0 0 --y0 1 --xEnd 1 --h 0.1 --method rk4
+
+# 7. Dominant Eigenvalue via Power Method with Rayleigh Quotient
+.\build\ees.exe eigen --matrix "[[2,2],[1,3]]" --plot
+
+# 8. Natural Cubic Spline Interpolation
+.\build\ees.exe spline --x "0,1,2,3" --y "0,1,8,27" --eval 1.5
+
+# 9. Initial Value ODE: Solve dy/dx = y using Runge-Kutta 4th-Order (RK4)
+.\build\ees.exe ode "y" --x0 0 --y0 1 --xEnd 1 --h 0.1 --method rk4 --table
+
+# 10. Compare all ODE solvers (Euler, Heun, RK4, Adams-Bashforth, Milne)
+.\build\ees.exe ode "y" --x0 0 --y0 1 --xEnd 1 --h 0.1 --compare
+
+# 11. 1D Parabolic Heat Equation PDE (with CFL stability check & ASCII heatmap)
 .\build\ees.exe pde heat --alpha 0.05 --L 1.0 --tMax 0.5
 
-# 2. Interactive Graphical / CLI Workbench
-.\build\ees.exe interactive
-# or run without arguments:
-.\build\ees.exe
+# 12. Floating-Point Stability & Catastrophic Cancellation Demonstration
+.\build\ees.exe arithmetic
 
-# 3. One-Click PBL Viva Demonstration Mode
-.\build\ees.exe demo
+# 13. Heuristic Numerical Method Advisor
+.\build\ees.exe advise root --derivative --bracket
+
+# 14. Display Full CLI Help & Flags
+.\build\ees.exe --help
 ```
 
 ---
 
-## 5. Automated Test Results
+### Step 3: Running Automated Test Suites
 
-All 5 test suites pass with 100% success rate:
+EES includes 5 comprehensive test executables integrated with **CTest**:
+
+```powershell
+# Run the complete test suite via CTest
+ctest --test-dir build --output-on-failure
+
+# Or run individual test suites directly:
+.\build\test_core.exe     # Vector, Matrix, Parser, ErrorAnalysis
+.\build\test_unit1.exe    # Taylor, Roots, Optimization
+.\build\test_unit2.exe    # Differences, Interpolation, Quadratures
+.\build\test_unit3.exe    # Linear Systems, LU, Cholesky, Splines
+.\build\test_unit4.exe    # ODEs (Euler, RK4, Milne) & PDEs (Heat, Wave, Laplace)
+```
+
+**Test Verification Summary**:
 ```text
 Test project D:/CODING/CM PBL/build
     Start 1: CoreMathTests
@@ -137,60 +230,116 @@ Test project D:/CODING/CM PBL/build
 5/5 Test #5: Unit4Tests .......................   Passed    0.01 sec
 
 100% tests passed, 0 tests failed out of 5
-Total Test time (real) = 0.08 sec
+Total Test time (real) = 0.06 sec
 ```
 
 ---
 
-## 6. One-Click PBL Viva Demonstration Showcase
+## 5. Sample Visualizations in Terminal
 
-Running `.\build\ees_app.exe --demo` executes the 9 milestone benchmarks sequentially:
-
+### Terminal 2D Function Curve with Root Marker `[O]`:
 ```text
-========================================================================================
-   EES — ENGINEERING EQUATION SOLVER
-   ALL-IN-ONE PBL VIVA DEMONSTRATION SHOWCASE
-========================================================================================
-Executing comprehensive demonstration across all 9 syllabus milestones...
+=== Root Finding Plot ===
+  y_max = 21.4726
+  |        |                                                       *|
+  |        |                                                      * |
+  |        |                                                    **  |
+  |        |                                                   *    |
+  |        |                                                 **     |
+  |        |                                                *       |
+  |        |                                              **        |
+  |        |                                            **          |
+  |--------+------------------------------------------O*------------|
+  |        |                                       ***              |
+  |        |                                    ***                 |
+  |******* |                                ****                    |
+  |       ***********                 ******                        |
+  |        |         *****************                              |
+  |        |                                                        |
+  y_min = -13.6737
+  x: [-0.5000 ... 3.5000]
+  Legend: [*] f(x) curve   [O] Root / Iteration Marker   [+] Origin
+```
 
-[1/9] ROOT FINDING (Newton-Raphson vs Bisection):
-  Root of x^3 - 4x - 9 = 0: 2.706528 in 4 iterations (Order: Quadratic)
-[2/9] MULTIVARIATE OPTIMIZATION (Nelder-Mead Simplex):
-  Minimum found at: [2.0000, 3.0000] in 39 cycles
-[3/9] INTERPOLATION (Gregory-Newton Forward):
-  Interpolated y(2.5): 11.625 (Exact: 11.625)
-[4/9] NUMERICAL INTEGRATION (Gauss-Legendre 5-Point vs Romberg):
-  Computed pi integral: 3.14159264 (Abs Error: 1.3705040214e-08)
-[5/9] LINEAR SYSTEM (Gauss Elimination with Partial Pivoting):
-  Solution x: [2.0000, 3.0000, -1.0000] (Det: -1.0000000000e+00)
-[6/9] EIGENVALUES (Power Method):
-  Dominant Eigenvalue: 4.000000 (Vector: [0.7071, 0.7071])
-[7/9] NATURAL CUBIC SPLINES (C2 Smoothness):
-  Spline interpolation at knot midpoint 1.5: 3.150000
-[8/9] ODE SOLUTION (Classic RK4):
-  RK4 Final Value: 2.718280 (Global Error: 2.084324e-06)
-[9/9] PDE SOLUTION (1D Heat Equation Diffusion):
-  Grid Generated: 21 x 11 [CFL r = 2.500000e-01]
-PDE Solution Intensity Field [Min=0.000, Max=1.000]:
-+----------------------------------------+
-|    ::::++++####%%%%@@@@%%%%####++++::: |
-|    ::::++++****%%%%%%%%%%%%****++++::: |
-|    ::::====****####%%%%####****====::: |
-|    ::::====****############****====::: |
-|    ::::====++++############++++====::: |
-|    ::::====++++************++++====::: |
-|    ::::----++++************++++----::: |
-|    ....----++++++++****++++++++----... |
-|    ....----====++++++++++++====----... |
-|    ....----====++++++++++++====----... |
-+----------------------------------------+
+### Semi-Log Convergence Trajectory Plot:
+```text
+=== Convergence Trajectory (Iteration vs Error) ===
+  log10(Error) [Top = 10^-0.6]
+  |#                                                                |
+  |                     #                                           |
+  |                                                                 |
+  |                                          #                      |
+  |                                                                 |
+  |                                                                #|
+  log10(Error) [Bottom = 10^-8]
+  Iteration: 1 -> 4
+```
 
-All 9 syllabus milestones verified and demonstrated successfully.
+### 1D Heat Equation Spatial-Temporal Heatmap:
+```text
+=== PDE Solution (Parabolic: 1D Heat Equation) ===
+Numerical Method: FTCS Explicit Finite Difference Scheme
+Grid Dimensions:  51 x 21
+CFL Stability Number: 0.2000 [STABLE]
+
+PDE Solution Intensity Field [Min=0.000, Max=100.000]:
++---------------------------------------------+
+|   ..::==++***##%%%%%%@@@%%%%%%##***++==::.. |
+|   ..::--++*****##%%%%%%%%%%%##*****++--::.. |
+|   ..::--==+++**####%%%%%%%####**+++==--::.. |
+|   ..::--==+++**###############**+++==--::.. |
+|   ..::--==+++****###########****+++==--::.. |
+|   ..::--==+++++****#######****+++++==--::.. |
+|   ..::--=====++***************++=====--::.. |
+|   ..::----===++++***********++++===----::.. |
+|     ..::--===++++++*******++++++===--::..   |
+|     ..::--=====++++++***++++++=====--::..   |
+|     ..::--=====+++++++++++++++=====--::..   |
+|     ..::-----====+++++++++++====-----::..   |
++---------------------------------------------+
 ```
 
 ---
 
-## 7. License & Academic Integrity
+## 6. Curated Engineering Problem Catalog
+
+EES provides pre-built engineering benchmarks ready to solve via menu Option 12:
+
+1. **Mechanical Engineering (`MECH-01`)**:
+   - **Problem**: Van der Waals equation of state for real gases: $(P + a/V^2)(V - b) = RT$.
+   - **Application**: Carbon dioxide molar volume at $50\text{ atm}$, $320\text{ K}$.
+   - **Method**: Newton-Raphson quadratic solve ($V \approx 0.000378\text{ m}^3/\text{mol}$).
+2. **Civil Engineering (`CIVIL-01`)**:
+   - **Problem**: 3-bar pin-jointed planar structural truss equilibrium.
+   - **Application**: Joint load resolution under $10\text{ kN}$ vertical load.
+   - **Method**: Gauss Elimination with Partial Pivoting.
+3. **Electrical Engineering (`ELEC-01`)**:
+   - **Problem**: Nonlinear Shockley diode equation in series circuit: $(V_s - V_D)/R = I_s(e^{V_D/V_t} - 1)$.
+   - **Application**: Forward operating voltage $V_D \approx 0.684\text{ V}$.
+   - **Method**: Newton-Raphson with central numerical derivatives.
+4. **Thermal Engineering (`THERM-01`)**:
+   - **Problem**: Transient heat conduction in aluminum rod quenched at both ends: $\frac{\partial u}{\partial t} = \alpha \frac{\partial^2 u}{\partial x^2}$.
+   - **Method**: Parabolic finite-difference FTCS scheme ($r \le 0.5$).
+5. **General Engineering (`GEN-01`)**:
+   - **Problem**: Lubricating oil viscosity vs temperature calibration.
+   - **Method**: Natural Cubic Spline ($C^2$ continuous, minimal bending energy).
+
+---
+
+## 7. Documentation Index
+
+For exhaustive theoretical derivations, pseudocode, and usage guides:
+- [`docs/SYLLABUS_MAPPING.md`](file:///d:/CODING/CM%20PBL/docs/SYLLABUS_MAPPING.md) — 100% Curriculum syllabus mapping table.
+- [`docs/ARCHITECTURE.md`](file:///d:/CODING/CM%20PBL/docs/ARCHITECTURE.md) — Software architecture, layering, and design patterns.
+- [`docs/ALGORITHMS.md`](file:///d:/CODING/CM%20PBL/docs/ALGORITHMS.md) — Mathematical formulas, convergence orders, and complexities ($O(n^3)$, $O(h^4)$).
+- [`docs/MATHEMATICAL_FOUNDATION.md`](file:///d:/CODING/CM%20PBL/docs/MATHEMATICAL_FOUNDATION.md) — Numerical mathematics theory (IEEE-754, Scarborough, CFL stability).
+- [`docs/TESTING.md`](file:///d:/CODING/CM%20PBL/docs/TESTING.md) — Test plan, benchmark values, and edge-case handling.
+- [`docs/USER_GUIDE.md`](file:///d:/CODING/CM%20PBL/docs/USER_GUIDE.md) — Comprehensive user guide with command reference.
+
+---
+
+## 8. License & Academic Integrity
 
 This software is developed strictly for educational and scientific research as part of the B.Tech Computational Methods Project-Based Learning (PBL) curriculum. Every numerical method and data structure is original C++ code developed from first principles without third-party mathematical solver libraries.
 
+Licensed under the [MIT License](LICENSE).

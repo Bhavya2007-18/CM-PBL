@@ -1,0 +1,10 @@
+build/
+bin/
+*.exe
+*.obj
+*.o
+*.a
+*.dll
+.vscode/
+.cache/
+
